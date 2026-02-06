@@ -1,6 +1,6 @@
-# Auth User Service - Standalone Microservice
+# Auth User Service - Standalone Domain Microservice
 
-A production-ready Spring Boot microservice for authentication and user management using AWS Cognito and PostgreSQL with **comprehensive observability**.
+A  Spring Boot microservice for authentication and user management using AWS Cognito and PostgreSQL with **comprehensive observability**.
 
 ## 🎯 Key Features
 ✅ AWS Cognito Authentication  
@@ -583,8 +583,6 @@ docker logs -f auth-service
 
 ## 📝 License
 
-Copyright © 2024. All rights reserved.
-
 ## 🤝 Support
 
 For issues and questions:
@@ -595,6 +593,6 @@ For issues and questions:
 
 ---
 
-**Status:** ✅ Production Ready  
+**Status:** ✅ Ready  
 **Version:** 1.0.0  
 **Last Updated:** February 2026
