@@ -1,0 +1,263 @@
+{
+  "dashboard": {
+    "title": "Auth User Service - Observability Dashboard",
+    "tags": ["auth", "authentication", "cognito"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Login Success Rate",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(rate(auth_login_success_total[5m])) / (sum(rate(auth_login_success_total[5m])) + sum(rate(auth_login_failure_total[5m]))) * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "textMode": "auto",
+          "colorMode": "value",
+          "unit": "percent"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Registration Success Rate",
+        "type": "stat",
+        "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(rate(auth_registration_success_total[5m])) / (sum(rate(auth_registration_success_total[5m])) + sum(rate(auth_registration_failure_total[5m]))) * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "textMode": "auto",
+          "colorMode": "value",
+          "unit": "percent"
+        }
+      },
+      {
+        "id": 3,
+        "title": "Login Attempts (Success vs Failure)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 4, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(auth_login_success_total[1m]))",
+            "legendFormat": "Success",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(auth_login_failure_total[1m]))",
+            "legendFormat": "Failure",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Registration Attempts",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 4, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(auth_registration_success_total[1m]))",
+            "legendFormat": "Success",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(auth_registration_failure_total[1m]))",
+            "legendFormat": "Failure",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Login Duration (p50, p95, p99)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 10, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(auth_login_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "p50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(auth_login_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "p95",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(auth_login_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "p99",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {"format": "ms"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Token Refresh Rate",
+        "type": "stat",
+        "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(rate(auth_token_refresh_total[5m]))",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "textMode": "auto",
+          "colorMode": "value",
+          "unit": "reqps"
+        }
+      },
+      {
+        "id": 7,
+        "title": "Password Operations",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 10, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(auth_password_reset_total[1m]))",
+            "legendFormat": "Reset",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(auth_password_change_total[1m]))",
+            "legendFormat": "Change",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "ops"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 8,
+        "title": "JVM Memory Usage",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 16, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "jvm_memory_used_bytes{area=\"heap\"}",
+            "legendFormat": "Heap Used",
+            "refId": "A"
+          },
+          {
+            "expr": "jvm_memory_max_bytes{area=\"heap\"}",
+            "legendFormat": "Heap Max",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "bytes"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 9,
+        "title": "HTTP Request Rate",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 16, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(http_server_requests_seconds_count[1m])) by (uri, status)",
+            "legendFormat": "{{uri}} - {{status}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Database Connection Pool",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 22, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "hikaricp_connections_active{pool=\"authdb\"}",
+            "legendFormat": "Active",
+            "refId": "A"
+          },
+          {
+            "expr": "hikaricp_connections_idle{pool=\"authdb\"}",
+            "legendFormat": "Idle",
+            "refId": "B"
+          },
+          {
+            "expr": "hikaricp_connections{pool=\"authdb\"}",
+            "legendFormat": "Total",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {"format": "short"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 11,
+        "title": "System CPU Usage",
+        "type": "gauge",
+        "gridPos": {"x": 12, "y": 22, "w": 6, "h": 6},
+        "targets": [
+          {
+            "expr": "system_cpu_usage * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "unit": "percent",
+          "min": 0,
+          "max": 100
+        }
+      },
+      {
+        "id": 12,
+        "title": "Process CPU Usage",
+        "type": "gauge",
+        "gridPos": {"x": 18, "y": 22, "w": 6, "h": 6},
+        "targets": [
+          {
+            "expr": "process_cpu_usage * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "unit": "percent",
+          "min": 0,
+          "max": 100
+        }
+      }
+    ]
+  }
+}
